@@ -14,7 +14,8 @@ var game = {};
 var x = 256;
 var y = 128;
 var vspeed = 0;
-var alive = 1;
+var started = 0;
+var alive = 0;
 var pipe_list = [];
 
 pipe_list[0] = {x:0, y:0}
@@ -32,7 +33,8 @@ document.onkeydown = function (e) {
     if(keycode == 32) {
         if(alive){
             vspeed = -3;
-        } else {
+        } else if(!started) { 
+            started = 1;
             alive = 1;
             y = 128;
             vspeed = -1;
@@ -40,6 +42,20 @@ document.onkeydown = function (e) {
             pipe_list[1] = {x:213, y:-64}
             pipe_list[2] = {x:426, y:-32}
         }
+    }
+}
+
+document.onclick = function (e) {
+    if(alive){
+        vspeed = -3;
+    } else if(!started) { 
+        started = 1;
+        alive = 1;
+        y = 128;
+        vspeed = -1;
+        pipe_list[0] = {x:0, y:0}
+        pipe_list[1] = {x:213, y:-64}
+        pipe_list[2] = {x:426, y:-32}
     }
 }
 
@@ -83,9 +99,12 @@ game.draw = function () {
                 context.drawImage(pipes, pipe_list[i].x, pipe_list[i].y, 96, 640);
             }
         }
+    } else if(started) {
+        context.font="48px serif";
+        context.fillText("Score: 0.6 hectometers... Convert to meters and go to that locker number (in 6th grade locker bay)", 128, 256);
     } else {
         context.font="48px serif";
-        context.fillText("Press Space to Retry",128,256);
+        context.fillText("Press Space to Start",128,256);
     }
 }
 
